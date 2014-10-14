@@ -1,0 +1,29 @@
+﻿[
+    {
+        "Id": "example2",
+        "Name": "Example 2",
+        "Url": "http://example.com",
+        "Xpath": "//example",
+        "ChannelTag": "channelTag",
+        "PushbulletKey": "RandomKey",
+        "Encoding": "ISO-8859-7"
+    },
+    {
+        "Id": "example1",
+        "Name": "Example 1",
+        "Url": "http://example.com",
+        "Xpath": "//example",
+        "ChannelTag": "",
+        "PushbulletKey": "RandomKey",
+        "Encoding": "UTF-8"
+    },
+    {
+        "Id": "example3",
+        "Name": "Example 3",
+        "Url": "http://example.com",
+        "Xpath": "//example",
+        "ChannelTag": "tag",
+        "PushbulletKey": "RandomKey",
+        "Encoding": "ISO-8859-1"
+    }
+]
