@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Pushbullet_Web_Scraper {
         // Websites
         public static List<WebsiteSettings> Websites;
         public static List<WebsiteTemporarySettings> WebsitesTemp;
-        
+
         public static void Main(string[] args) {
             // Read settings from disk
             ReadSettings();
@@ -30,22 +30,26 @@ namespace Pushbullet_Web_Scraper {
                 // Parse announcemets
                 var node = doc.DocumentNode.SelectNodes(website.Xpath);
 
-                string noHTML = Regex.Replace(node[0].InnerText, @"<[^>]+>|&nbsp;", "").Trim();
-                string noHTMLNormalised = Regex.Replace(noHTML, @"\s{2,}", " ");
+                if (node != null) { // If the node eixsts
+                    string noHTML = Regex.Replace(node[0].InnerText, @"<[^>]+>|&nbsp;", "").Trim();
+                    string noHTMLNormalised = Regex.Replace(noHTML, @"\s{2,}", " ");
 
-                // Check if it's new
-                if (lastStatus != null) {
-                    if (lastStatus.LastAnnouncement == noHTMLNormalised) continue;
-                    lastStatus.LastAnnouncement = noHTMLNormalised;
+                    // Check if it's new
+                    if (lastStatus != null) {
+                        if (lastStatus.LastAnnouncement == noHTMLNormalised) continue;
+                        lastStatus.LastAnnouncement = noHTMLNormalised;
 
-                    PushbulletApi.PushLink(website.Name, noHTMLNormalised, website.Url, website.PushbulletKey, website.ChannelTag);
-                } else {
-                    WebsiteTemporarySettings temp = new WebsiteTemporarySettings();
-                    temp.Id = website.Id;
-                    temp.LastAnnouncement = noHTMLNormalised;
-                    WebsitesTemp.Add(temp);
+                        PushbulletApi.PushLink(website.Name, noHTMLNormalised, website.Url, website.PushbulletKey, website.ChannelTag);
+                    } else {
+                        WebsiteTemporarySettings temp = new WebsiteTemporarySettings();
+                        temp.Id = website.Id;
+                        temp.LastAnnouncement = noHTMLNormalised;
+                        WebsitesTemp.Add(temp);
 
-                    PushbulletApi.PushLink(website.Name, noHTMLNormalised, website.Url, website.PushbulletKey, website.ChannelTag);
+                        PushbulletApi.PushLink(website.Name, noHTMLNormalised, website.Url, website.PushbulletKey, website.ChannelTag);
+                    }
+                } else { // The page layout has changed
+                    PushbulletApi.PushLink(website.Name, "Page layout changed.", website.Url, website.PushbulletKey, website.ChannelTag);
                 }
             }
 
